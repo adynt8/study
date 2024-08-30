@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physics Tools - Neo-Brutal Calculator Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            color: #000;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #000;
+            margin-bottom: 30px;
+            font-size: 3em;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            background-color: #ff6b6b;
+            padding: 20px;
+            border: 4px solid #000;
+            box-shadow: 8px 8px 0 #000;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        nav button {
+            margin: 5px;
+            padding: 10px 15px;
+            border: 3px solid #000;
+            background-color: #4ecdc4;
+            color: #000;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            text-transform: uppercase;
+            font-weight: bold;
+            transition: all 0.1s;
+        }
+        nav button:hover {
+            background-color: #45b7aa;
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0 #000;
+        }
+        nav button:active {
+            transform: translate(0, 0);
+            box-shadow: none;
+        }
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .mini-tool {
+            background-color: #fff;
+            border: 3px solid #000;
+            padding: 15px;
+            text-align: center;
+        }
+        .mini-tool h3 {
+            margin-top: 0;
+            background-color: #54a0ff;
+            padding: 5px;
+            border: 2px solid #000;
+        }
+        input, select, button {
+            margin: 5px 0;
+            padding: 10px;
+            border: 3px solid #000;
+            font-size: 16px;
+            background-color: #fff;
+            color: #000;
+            font-family: 'Inter', sans-serif;
+        }
+        button {
+            background-color: #feca57;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.1s;
+        }
+        button:hover {
+            background-color: #feb125;
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0 #000;
+        }
+        button:active {
+            transform: translate(0, 0);
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Physics Tools</h1>
+        
+        <nav>
+            <button onclick="location.href='study_tools.html'">Study Tools</button>
+            <button onclick="location.href='Untitled-1.html'">Calculators</button>
+        </nav>
+
+        <div class="tool-grid">
+            <div class="mini-tool">
+                <h3>Kinematics Calculator</h3>
+                <select id="kinematicsFormula">
+                    <option value="displacement">Displacement</option>
+                    <option value="velocity">Velocity</option>
+                    <option value="acceleration">Acceleration</option>
+                </select>
+                <input type="number" id="kinematicsInput1" placeholder="Value 1">
+                <input type="number" id="kinematicsInput2" placeholder="Value 2">
+                <input type="number" id="kinematicsInput3" placeholder="Value 3">
+                <button onclick="calculateKinematics()">Calculate</button>
+                <p id="kinematicsResult"></p>
+            </div>
+
+            <div class="mini-tool">
+                <h3>Force Calculator</h3>
+                <input type="number" id="mass" placeholder="Mass (kg)">
+                <input type="number" id="acceleration" placeholder="Acceleration (m/s²)">
+                <button onclick="calculateForce()">Calculate Force</button>
+                <p id="forceResult"></p>
+            </div>
+
+            <div class="mini-tool">
+                <h3>Energy Converter</h3>
+                <input type="number" id="energyInput" placeholder="Enter value">
+                <select id="fromEnergyUnit">
+                    <option value="joule">Joule (J)</option>
+                    <option value="calorie">Calorie (cal)</option>
+                    <option value="electronvolt">Electron Volt (eV)</option>
+                    <option value="kwh">Kilowatt Hour (kWh)</option>
+                </select>
+                <select id="toEnergyUnit">
+                    <option value="joule">Joule (J)</option>
+                    <option value="calorie">Calorie (cal)</option>
+                    <option value="electronvolt">Electron Volt (eV)</option>
+                    <option value="kwh">Kilowatt Hour (kWh)</option>
+                </select>
+                <button onclick="convertEnergy()">Convert</button>
+                <p id="energyResult"></p>
+            </div>
+
+            <div class="mini-tool">
+                <h3>Ohm's Law Calculator</h3>
+                <input type="number" id="voltage" placeholder="Voltage (V)">
+                <input type="number" id="current" placeholder="Current (A)">
+                <input type="number" id="resistance" placeholder="Resistance (Ω)">
+                <button onclick="calculateOhmsLaw()">Calculate</button>
+                <p id="ohmsLawResult"></p>
+            </div>
+
+            <div class="mini-tool">
+                <h3>Gravitational Force Calculator</h3>
+                <input type="number" id="mass1" placeholder="Mass 1 (kg)">
+                <input type="number" id="mass2" placeholder="Mass 2 (kg)">
+                <input type="number" id="distance" placeholder="Distance (m)">
+                <button onclick="calculateGravitationalForce()">Calculate</button>
+                <p id="gravitationalForceResult"></p>
+            </div>
+
+            <div class="mini-tool">
+                <h3>Wave Properties Calculator</h3>
+                <input type="number" id="wavelength" placeholder="Wavelength (m)">
+                <input type="number" id="frequency" placeholder="Frequency (Hz)">
+                <button onclick="calculateWaveProperties()">Calculate</button>
+                <p id="wavePropertiesResult"></p>
+            </div>
+
+            <div class="mini-tool">
+                <h3>Projectile Motion Calculator</h3>
+                <input type="number" id="initialVelocity" placeholder="Initial Velocity (m/s)">
+                <input type="number" id="launchAngle" placeholder="Launch Angle (degrees)">
+                <button onclick="calculateProjectileMotion()">Calculate</button>
+                <p id="projectileMotionResult"></p>
+            </div>
+
+            <div class="mini-tool">
+                <h3>Doppler Effect Calculator</h3>
+                <input type="number" id="sourceFrequency" placeholder="Source Frequency (Hz)">
+                <input type="number" id="sourceVelocity" placeholder="Source Velocity (m/s)">
+                <input type="number" id="observerVelocity" placeholder="Observer Velocity (m/s)">
+                <button onclick="calculateDopplerEffect()">Calculate</button>
+                <p id="dopplerEffectResult"></p>
+            </div>
+
+            <div class="mini-tool">
+                <h3>Momentum Calculator</h3>
+                <input type="number" id="momentumMass" placeholder="Mass (kg)">
+                <input type="number" id="momentumVelocity" placeholder="Velocity (m/s)">
+                <button onclick="calculateMomentum()">Calculate Momentum</button>
+                <p id="momentumResult"></p>
+            </div>
+
+            <div class="mini-tool">
+                <h3>Centripetal Force Calculator</h3>
+                <input type="number" id="centripetalMass" placeholder="Mass (kg)">
+                <input type="number" id="centripetalVelocity" placeholder="Velocity (m/s)">
+                <input type="number" id="centripetalRadius" placeholder="Radius (m)">
+                <button onclick="calculateCentripetalForce()">Calculate Force</button>
+                <p id="centripetalForceResult"></p>
+            </div>
+
+            <div class="mini-tool">
+                <h3>Work and Power Calculator</h3>
+                <input type="number" id="workForce" placeholder="Force (N)">
+                <input type="number" id="workDistance" placeholder="Distance (m)">
+                <input type="number" id="workTime" placeholder="Time (s)">
+                <button onclick="calculateWorkAndPower()">Calculate</button>
+                <p id="workAndPowerResult"></p>
+            </div>
+
+            <div class="mini-tool">
+                <h3>Pressure Calculator</h3>
+                <input type="number" id="pressureForce" placeholder="Force (N)">
+                <input type="number" id="pressureArea" placeholder="Area (m²)">
+                <button onclick="calculatePressure()">Calculate Pressure</button>
+                <p id="pressureResult"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function calculateKinematics() {
+            const formula = document.getElementById('kinematicsFormula').value;
+            const v1 = parseFloat(document.getElementById('kinematicsInput1').value);
+            const v2 = parseFloat(document.getElementById('kinematicsInput2').value);
+            const v3 = parseFloat(document.getElementById('kinematicsInput3').value);
+            let result;
+
+            switch (formula) {
+                case 'displacement':
+                    result = v1 * v2 + 0.5 * v3 * v2 * v2;
+                    break;
+                case 'velocity':
+                    result = v1 + v2 * v3;
+                    break;
+                case 'acceleration':
+                    result = (v2 - v1) / v3;
+                    break;
+            }
+
+            document.getElementById('kinematicsResult').textContent = `Result: ${result.toFixed(2)}`;
+        }
+
+        function calculateForce() {
+            const mass = parseFloat(document.getElementById('mass').value);
+            const acceleration = parseFloat(document.getElementById('acceleration').value);
+            const force = mass * acceleration;
+            document.getElementById('forceResult').textContent = `Force: ${force.toFixed(2)} N`;
+        }
+
+        function convertEnergy() {
+            const energyInput = parseFloat(document.getElementById('energyInput').value);
+            const fromUnit = document.getElementById('fromEnergyUnit').value;
+            const toUnit = document.getElementById('toEnergyUnit').value;
+            const conversionFactors = {
+                joule: 1,
+                calorie: 4.184,
+                electronvolt: 1.602176634e-19,
+                kwh: 3600000
+            };
+
+            const result = energyInput * conversionFactors[fromUnit] / conversionFactors[toUnit];
+            document.getElementById('energyResult').textContent = `Result: ${result.toExponential(4)} ${toUnit}`;
+        }
+
+        function calculateOhmsLaw() {
+            const voltage = parseFloat(document.getElementById('voltage').value);
+            const current = parseFloat(document.getElementById('current').value);
+            const resistance = parseFloat(document.getElementById('resistance').value);
+            let result;
+
+            if (isNaN(voltage)) {
+                result = `Voltage: ${(current * resistance).toFixed(2)} V`;
+            } else if (isNaN(current)) {
+                result = `Current: ${(voltage / resistance).toFixed(2)} A`;
+            } else if (isNaN(resistance)) {
+                result = `Resistance: ${(voltage / current).toFixed(2)} Ω`;
+            }
+
+            document.getElementById('ohmsLawResult').textContent = result;
+        }
+
+        function calculateGravitationalForce() {
+            const G = 6.674e-11;
+            const mass1 = parseFloat(document.getElementById('mass1').value);
+            const mass2 = parseFloat(document.getElementById('mass2').value);
+            const distance = parseFloat(document.getElementById('distance').value);
+            const force = G * mass1 * mass2 / (distance * distance);
+            document.getElementById('gravitationalForceResult').textContent = `Gravitational Force: ${force.toExponential(4)} N`;
+        }
+
+        function calculateWaveProperties() {
+            const wavelength = parseFloat(document.getElementById('wavelength').value);
+            const frequency = parseFloat(document.getElementById('frequency').value);
+            const c = 299792458; // Speed of light in m/s
+
+            if (isNaN(wavelength)) {
+                const calculatedWavelength = c / frequency;
+                document.getElementById('wavePropertiesResult').textContent = `Wavelength: ${calculatedWavelength.toExponential(4)} m`;
+            } else if (isNaN(frequency)) {
+                const calculatedFrequency = c / wavelength;
+                document.getElementById('wavePropertiesResult').textContent = `Frequency: ${calculatedFrequency.toExponential(4)} Hz`;
+            }
+        }
+
+        function calculateProjectileMotion() {
+            const v0 = parseFloat(document.getElementById('initialVelocity').value);
+            const angle = parseFloat(document.getElementById('launchAngle').value);
+            const g = 9.81; // acceleration due to gravity in m/s^2
+
+            const angleRad = angle * Math.PI / 180;
+            const maxHeight = (v0 * Math.sin(angleRad))**2 / (2 * g);
+            const range = (v0**2 * Math.sin(2 * angleRad)) / g;
+            const flightTime = 2 * v0 * Math.sin(angleRad) / g;
+
+            document.getElementById('projectileMotionResult').innerHTML = 
+                `Max Height: ${maxHeight.toFixed(2)} m<br>` +
+                `Range: ${range.toFixed(2)} m<br>` +
+                `Flight Time: ${flightTime.toFixed(2)} s`;
+        }
+
+        function calculateDopplerEffect() {
+            const f = parseFloat(document.getElementById('sourceFrequency').value);
+            const vs = parseFloat(document.getElementById('sourceVelocity').value);
+            const vo = parseFloat(document.getElementById('observerVelocity').value);
+            const c = 343; // speed of sound in air at 20°C in m/s
+
+            const observedFrequency = f * ((c + vo) / (c + vs));
+
+            document.getElementById('dopplerEffectResult').textContent = 
+                `Observed Frequency: ${observedFrequency.toFixed(2)} Hz`;
+        }
+
+        function calculateMomentum() {
+            const mass = parseFloat(document.getElementById('momentumMass').value);
+            const velocity = parseFloat(document.getElementById('momentumVelocity').value);
+            const momentum = mass * velocity;
+
+            document.getElementById('momentumResult').textContent = 
+                `Momentum: ${momentum.toFixed(2)} kg⋅m/s`;
+        }
+
+        function calculateCentripetalForce() {
+            const mass = parseFloat(document.getElementById('centripetalMass').value);
+            const velocity = parseFloat(document.getElementById('centripetalVelocity').value);
+            const radius = parseFloat(document.getElementById('centripetalRadius').value);
+            const force = mass * velocity**2 / radius;
+
+            document.getElementById('centripetalForceResult').textContent = 
+                `Centripetal Force: ${force.toFixed(2)} N`;
+        }
+
+        function calculateWorkAndPower() {
+            const force = parseFloat(document.getElementById('workForce').value);
+            const distance = parseFloat(document.getElementById('workDistance').value);
+            const time = parseFloat(document.getElementById('workTime').value);
+
+            const work = force * distance;
+            const power = work / time;
+
+            document.getElementById('workAndPowerResult').innerHTML = 
+                `Work: ${work.toFixed(2)} J<br>Power: ${power.toFixed(2)} W`;
+        }
+
+        function calculatePressure() {
+            const force = parseFloat(document.getElementById('pressureForce').value);
+            const area = parseFloat(document.getElementById('pressureArea').value);
+
+            const pressure = force / area;
+
+            document.getElementById('pressureResult').textContent = 
+                `Pressure: ${pressure.toFixed(2)} Pa`;
+        }
+    </script>
+</body>
+</html>

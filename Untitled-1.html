@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neo-Brutal Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            color: #000;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #000;
+            margin-bottom: 30px;
+            font-size: 3em;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            background-color: #ff6b6b;
+            padding: 20px;
+            border: 4px solid #000;
+            box-shadow: 8px 8px 0 #000;
+        }
+        .calculator {
+            display: none;
+            background-color: #fff;
+            border: 4px solid #000;
+            box-shadow: 8px 8px 0 #000;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .calculator.active {
+            display: block;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        nav button {
+            margin: 0 5px;
+            padding: 10px 15px;
+            border: 3px solid #000;
+            background-color: #4ecdc4;
+            color: #000;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            text-transform: uppercase;
+            font-weight: bold;
+            transition: all 0.1s;
+        }
+        nav button:hover {
+            background-color: #45b7aa;
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0 #000;
+        }
+        nav button:active {
+            transform: translate(0, 0);
+            box-shadow: none;
+        }
+        input, select, button {
+            margin: 5px 0;
+            padding: 10px;
+            border: 3px solid #000;
+            font-size: 16px;
+            background-color: #fff;
+            color: #000;
+            font-family: 'Inter', sans-serif;
+        }
+        button {
+            background-color: #feca57;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.1s;
+        }
+        button:hover {
+            background-color: #feb125;
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0 #000;
+        }
+        button:active {
+            transform: translate(0, 0);
+            box-shadow: none;
+        }
+        #graph {
+            border: 3px solid #000;
+            background-color: #fff;
+        }
+        h2 {
+            color: #000;
+            margin-top: 0;
+            font-size: 1.5em;
+            text-transform: uppercase;
+            background-color: #ff9ff3;
+            padding: 10px;
+            border: 3px solid #000;
+            display: inline-block;
+        }
+        .calculator-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+        .calculator-buttons button {
+            padding: 12px;
+            font-size: 18px;
+        }
+        #display, #convInput, #equation {
+            width: calc(100% - 26px);
+            margin-bottom: 10px;
+            font-size: 1.2em;
+            background-color: #fff;
+            border: 3px solid #000;
+            padding: 10px;
+        }
+        #conversionCategory, #fromUnit, #toUnit {
+            width: 100%;
+            margin-bottom: 10px;
+            background-color: #fff;
+            color: #000;
+        }
+        #convResult {
+            background-color: #54a0ff;
+            padding: 10px;
+            font-weight: bold;
+            border: 3px solid #000;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Neo-Brutal Calculator</h1>
+        
+        <nav>
+            <button onclick="showCalculator('conversion')">Conversion</button>
+            <button onclick="showCalculator('graphing')">Graphing</button>
+            <button onclick="showCalculator('advanced')">Advanced Calculator</button>
+            <button onclick="location.href='study_tools.html'">Study Tools</button>
+        </nav>
+
+        <div class="calculator" data-type="conversion">
+            <h2>Conversion Calculator</h2>
+            <select id="conversionCategory" onchange="updateConversionUnits()">
+                <option value="length">Length</option>
+                <option value="weight">Weight</option>
+                <option value="temperature">Temperature</option>
+                <option value="volume">Volume</option>
+                <option value="area">Area</option>
+            </select>
+            <input type="number" id="convInput" placeholder="Enter value">
+            <select id="fromUnit"></select>
+            <select id="toUnit"></select>
+            <button onclick="convert()">Convert</button>
+            <p id="convResult"></p>
+        </div>
+        
+        <div class="calculator" data-type="graphing">
+            <h2>Graphing Calculator</h2>
+            <input type="text" id="equation" placeholder="Enter equation (e.g., x^2)">
+            <button onclick="drawGraph()">Graph</button>
+            <canvas id="graph"></canvas>
+        </div>
+        
+        <div class="calculator" data-type="advanced">
+            <h2>Advanced Calculator</h2>
+            <input type="text" id="display" readonly>
+            <div class="calculator-buttons">
+                <button onclick="clearDisplay()">C</button>
+                <button onclick="backspace()">⌫</button>
+                <button onclick="appendToDisplay('(')">(</button>
+                <button onclick="appendToDisplay(')')">)</button>
+                
+                <button onclick="appendToDisplay('7')">7</button>
+                <button onclick="appendToDisplay('8')">8</button>
+                <button onclick="appendToDisplay('9')">9</button>
+                <button onclick="appendToDisplay('/')">/</button>
+                
+                <button onclick="appendToDisplay('4')">4</button>
+                <button onclick="appendToDisplay('5')">5</button>
+                <button onclick="appendToDisplay('6')">6</button>
+                <button onclick="appendToDisplay('*')">*</button>
+                
+                <button onclick="appendToDisplay('1')">1</button>
+                <button onclick="appendToDisplay('2')">2</button>
+                <button onclick="appendToDisplay('3')">3</button>
+                <button onclick="appendToDisplay('-')">-</button>
+                
+                <button onclick="appendToDisplay('0')">0</button>
+                <button onclick="appendToDisplay('.')">.</button>
+                <button onclick="calculateResult()">=</button>
+                <button onclick="appendToDisplay('+')">+</button>
+            </div>
+            <div class="scientific-buttons">
+                <button onclick="appendToDisplay('Math.sin(')">sin</button>
+                <button onclick="appendToDisplay('Math.cos(')">cos</button>
+                <button onclick="appendToDisplay('Math.tan(')">tan</button>
+                <button onclick="appendToDisplay('Math.PI')">π</button>
+                <button onclick="appendToDisplay('Math.sqrt(')">√</button>
+                <button onclick="appendToDisplay('Math.pow(')">x^y</button>
+                <button onclick="appendToDisplay('Math.log(')">log</button>
+                <button onclick="appendToDisplay('Math.E')">e</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Conversion Calculator
+        const conversionUnits = {
+            length: ['Meters', 'Kilometers', 'Centimeters', 'Millimeters', 'Miles', 'Yards', 'Feet', 'Inches'],
+            weight: ['Kilograms', 'Grams', 'Milligrams', 'Pounds', 'Ounces'],
+            temperature: ['Celsius', 'Fahrenheit', 'Kelvin'],
+            volume: ['Liters', 'Milliliters', 'Cubic Meters', 'Gallons', 'Quarts', 'Pints', 'Cups'],
+            area: ['Square Meters', 'Square Kilometers', 'Square Feet', 'Square Yards', 'Acres', 'Hectares']
+        };
+
+        function updateConversionUnits() {
+            const category = document.getElementById('conversionCategory').value;
+            const fromUnit = document.getElementById('fromUnit');
+            const toUnit = document.getElementById('toUnit');
+            
+            fromUnit.innerHTML = '';
+            toUnit.innerHTML = '';
+            
+            conversionUnits[category].forEach(unit => {
+                fromUnit.innerHTML += `<option value="${unit}">${unit}</option>`;
+                toUnit.innerHTML += `<option value="${unit}">${unit}</option>`;
+            });
+        }
+
+        function convert() {
+            const input = parseFloat(document.getElementById('convInput').value);
+            const fromUnit = document.getElementById('fromUnit').value;
+            const toUnit = document.getElementById('toUnit').value;
+            const category = document.getElementById('conversionCategory').value;
+            
+            if (isNaN(input)) {
+                document.getElementById('convResult').textContent = 'Please enter a valid number';
+                return;
+            }
+            
+            let result;
+            
+            switch (category) {
+                case 'length':
+                    result = convertLength(input, fromUnit, toUnit);
+                    break;
+                case 'weight':
+                    result = convertWeight(input, fromUnit, toUnit);
+                    break;
+                case 'temperature':
+                    result = convertTemperature(input, fromUnit, toUnit);
+                    break;
+                case 'volume':
+                    result = convertVolume(input, fromUnit, toUnit);
+                    break;
+                case 'area':
+                    result = convertArea(input, fromUnit, toUnit);
+                    break;
+            }
+            
+            document.getElementById('convResult').textContent = `${input} ${fromUnit} = ${result.toFixed(4)} ${toUnit}`;
+        }
+
+        function convertLength(value, from, to) {
+            const meterConversion = {
+                'Meters': 1,
+                'Kilometers': 0.001,
+                'Centimeters': 100,
+                'Millimeters': 1000,
+                'Miles': 0.000621371,
+                'Yards': 1.09361,
+                'Feet': 3.28084,
+                'Inches': 39.3701
+            };
+            
+            const meters = value / meterConversion[from];
+            return meters * meterConversion[to];
+        }
+
+        function convertWeight(value, from, to) {
+            const kgConversion = {
+                'Kilograms': 1,
+                'Grams': 1000,
+                'Milligrams': 1e6,
+                'Pounds': 2.20462,
+                'Ounces': 35.274
+            };
+            
+            const kg = value / kgConversion[from];
+            return kg * kgConversion[to];
+        }
+
+        function convertTemperature(value, from, to) {
+            let celsius;
+            
+            switch (from) {
+                case 'Celsius':
+                    celsius = value;
+                    break;
+                case 'Fahrenheit':
+                    celsius = (value - 32) * 5/9;
+                    break;
+                case 'Kelvin':
+                    celsius = value - 273.15;
+                    break;
+            }
+            
+            switch (to) {
+                case 'Celsius':
+                    return celsius;
+                case 'Fahrenheit':
+                    return celsius * 9/5 + 32;
+                case 'Kelvin':
+                    return celsius + 273.15;
+            }
+        }
+
+        function convertVolume(value, from, to) {
+            const literConversion = {
+                'Liters': 1,
+                'Milliliters': 1000,
+                'Cubic Meters': 0.001,
+                'Gallons': 0.264172,
+                'Quarts': 1.05669,
+                'Pints': 2.11338,
+                'Cups': 4.22675
+            };
+            
+            const liters = value / literConversion[from];
+            return liters * literConversion[to];
+        }
+
+        function convertArea(value, from, to) {
+            const sqMeterConversion = {
+                'Square Meters': 1,
+                'Square Kilometers': 1e-6,
+                'Square Feet': 10.7639,
+                'Square Yards': 1.19599,
+                'Acres': 0.000247105,
+                'Hectares': 0.0001
+            };
+            
+            const sqMeters = value / sqMeterConversion[from];
+            return sqMeters * sqMeterConversion[to];
+        }
+
+        // Initialize conversion units
+        updateConversionUnits();
+
+        // Graphing Calculator
+        function drawGraph() {
+            const canvas = document.getElementById('graph');
+            const ctx = canvas.getContext('2d');
+            const equation = document.getElementById('equation').value;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawAxes(ctx, canvas);
+
+            ctx.beginPath();
+            for (let x = -10; x <= 10; x += 0.1) {
+                const y = evaluateEquation(equation, x);
+                const canvasX = mapX(x, canvas);
+                const canvasY = mapY(y, canvas);
+                if (x === -10) {
+                    ctx.moveTo(canvasX, canvasY);
+                } else {
+                    ctx.lineTo(canvasX, canvasY);
+                }
+            }
+            ctx.stroke();
+
+            canvas.onmousemove = function(e) {
+                const rect = canvas.getBoundingClientRect();
+                const x = mapXInverse(e.clientX - rect.left, canvas);
+                const y = evaluateEquation(equation, x);
+                
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                drawAxes(ctx, canvas);
+                ctx.beginPath();
+                for (let x = -10; x <= 10; x += 0.1) {
+                    const y = evaluateEquation(equation, x);
+                    const canvasX = mapX(x, canvas);
+                    const canvasY = mapY(y, canvas);
+                    if (x === -10) {
+                        ctx.moveTo(canvasX, canvasY);
+                    } else {
+                        ctx.lineTo(canvasX, canvasY);
+                    }
+                }
+                ctx.stroke();
+
+                // Draw point
+                const pointX = mapX(x, canvas);
+                const pointY = mapY(y, canvas);
+                ctx.beginPath();
+                ctx.arc(pointX, pointY, 5, 0, 2 * Math.PI);
+                ctx.fill();
+
+                // Show coordinates
+                ctx.fillText(`(${x.toFixed(2)}, ${y.toFixed(2)})`, pointX + 10, pointY - 10);
+            };
+        }
+
+        function drawAxes(ctx, canvas) {
+            ctx.beginPath();
+            ctx.moveTo(0, canvas.height / 2);
+            ctx.lineTo(canvas.width, canvas.height / 2);
+            ctx.moveTo(canvas.width / 2, 0);
+            ctx.lineTo(canvas.width / 2, canvas.height);
+            ctx.stroke();
+        }
+
+        function mapX(x, canvas) {
+            return (x + 10) * (canvas.width / 20);
+        }
+
+        function mapY(y, canvas) {
+            return canvas.height - (y + 10) * (canvas.height / 20);
+        }
+
+        function mapXInverse(canvasX, canvas) {
+            return (canvasX / canvas.width) * 20 - 10;
+        }
+
+        function evaluateEquation(equation, x) {
+            return eval(equation.replace(/x/g, `(${x})`));
+        }
+
+        // Advanced Calculator
+        function appendToDisplay(value) {
+            document.getElementById('display').value += value;
+        }
+
+        function clearDisplay() {
+            document.getElementById('display').value = '';
+        }
+
+        function calculateResult() {
+            const display = document.getElementById('display');
+            try {
+                display.value = eval(display.value);
+            } catch (error) {
+                display.value = 'Error';
+            }
+        }
+
+        function backspace() {
+            const display = document.getElementById('display');
+            display.value = display.value.slice(0, -1);
+        }
+
+        function showCalculator(type) {
+            const calculators = document.getElementsByClassName('calculator');
+            for (let calc of calculators) {
+                calc.classList.remove('active');
+            }
+            document.querySelector(`.calculator[data-type="${type}"]`).classList.add('active');
+        }
+
+        // Check for hash in URL and show appropriate calculator
+        function checkHash() {
+            const hash = window.location.hash.substr(1);
+            if (hash && ['conversion', 'graphing', 'advanced'].includes(hash)) {
+                showCalculator(hash);
+            } else {
+                showCalculator('conversion'); // Default to conversion calculator
+            }
+        }
+
+        // Run checkHash on page load and when the hash changes
+        window.addEventListener('load', checkHash);
+        window.addEventListener('hashchange', checkHash);
+    </script>
+</body>
+</html>
+
+

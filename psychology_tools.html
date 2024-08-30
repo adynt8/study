@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Psychology Tools - Neo-Brutal Calculator Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Copy the styles from study_tools.html and add/modify as needed */
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            color: #000;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #000;
+            margin-bottom: 30px;
+            font-size: 3em;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            background-color: #ff6b6b;
+            padding: 20px;
+            border: 4px solid #000;
+            box-shadow: 8px 8px 0 #000;
+        }
+        /* Add more styles as needed */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Psychology Tools</h1>
+        
+        <nav>
+            <button onclick="location.href='study_tools.html'">Study Tools</button>
+            <button onclick="location.href='Untitled-1.html'">Calculators</button>
+        </nav>
+
+        <div class="tool">
+            <h2>Cognitive Bias Identifier</h2>
+            <select id="biasSelector">
+                <option value="">Select a cognitive bias</option>
+                <option value="confirmation">Confirmation Bias</option>
+                <option value="anchoring">Anchoring Bias</option>
+                <option value="availability">Availability Heuristic</option>
+                <!-- Add more biases as needed -->
+            </select>
+            <button onclick="showBiasInfo()">Show Information</button>
+            <div id="biasInfo"></div>
+        </div>
+
+        <div class="tool">
+            <h2>Personality Type Quiz</h2>
+            <div id="quizContainer">
+                <!-- Quiz questions will be dynamically added here -->
+            </div>
+            <button onclick="startQuiz()">Start Quiz</button>
+            <button onclick="submitQuiz()" style="display:none;">Submit Quiz</button>
+            <div id="quizResult"></div>
+        </div>
+
+        <div class="tool">
+            <h2>Psychological Experiment Simulator</h2>
+            <select id="experimentType">
+                <option value="">Select an experiment</option>
+                <option value="pavlov">Pavlov's Dog</option>
+                <option value="milgram">Milgram Obedience</option>
+                <option value="asch">Asch Conformity</option>
+            </select>
+            <button onclick="runExperiment()">Run Simulation</button>
+            <div id="experimentResult"></div>
+        </div>
+    </div>
+
+    <script>
+        function showBiasInfo() {
+            const bias = document.getElementById('biasSelector').value;
+            const biasInfo = document.getElementById('biasInfo');
+            const biasDescriptions = {
+                confirmation: "Confirmation bias is the tendency to search for, interpret, favor, and recall information in a way that confirms or supports one's prior beliefs or values.",
+                anchoring: "Anchoring is a cognitive bias where an individual relies too heavily on an initial piece of information offered when making decisions.",
+                availability: "The availability heuristic is a mental shortcut that relies on immediate examples that come to mind when evaluating a specific topic, concept, method or decision."
+            };
+            biasInfo.textContent = biasDescriptions[bias] || "Please select a bias.";
+        }
+
+        function startQuiz() {
+            const quizContainer = document.getElementById('quizContainer');
+            const questions = [
+                "I enjoy social gatherings and meeting new people.",
+                "I prefer to work alone rather than in a team.",
+                "I often act on impulse without thinking things through.",
+                "I tend to plan ahead and organize my tasks.",
+                "I am easily stressed and worried."
+            ];
+            quizContainer.innerHTML = questions.map((q, i) => `
+                <div>
+                    <p>${q}</p>
+                    <input type="radio" name="q${i}" value="1"> Strongly Disagree
+                    <input type="radio" name="q${i}" value="2"> Disagree
+                    <input type="radio" name="q${i}" value="3"> Neutral
+                    <input type="radio" name="q${i}" value="4"> Agree
+                    <input type="radio" name="q${i}" value="5"> Strongly Agree
+                </div>
+            `).join('');
+            document.querySelector('button[onclick="startQuiz()"]').style.display = 'none';
+            document.querySelector('button[onclick="submitQuiz()"]').style.display = 'inline-block';
+        }
+
+        function submitQuiz() {
+            const result = document.getElementById('quizResult');
+            result.textContent = "Thank you for taking the quiz. A real implementation would analyze your answers and provide a personality profile.";
+        }
+
+        function runExperiment() {
+            const experiment = document.getElementById('experimentType').value;
+            const result = document.getElementById('experimentResult');
+            const experimentResults = {
+                pavlov: "In Pavlov's experiment, a dog was conditioned to salivate at the sound of a bell, demonstrating classical conditioning.",
+                milgram: "Milgram's experiment showed that a high proportion of people would obey an authority figure who instructed them to perform acts that conflicted with their personal conscience.",
+                asch: "Asch's conformity experiments demonstrated the power of conformity in groups and showed that people are willing to ignore reality and give an incorrect answer in order to conform to the rest of the group."
+            };
+            result.textContent = experimentResults[experiment] || "Please select an experiment.";
+        }
+    </script>
+</body>
+</html>

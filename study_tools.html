@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Tools - Neo-Brutal Calculator Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            color: #000;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #000;
+            margin-bottom: 30px;
+            font-size: 3em;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            background-color: #ff6b6b;
+            padding: 20px;
+            border: 4px solid #000;
+            box-shadow: 8px 8px 0 #000;
+        }
+        nav, .category-buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        nav button, .category-buttons button {
+            margin: 5px;
+            padding: 10px 15px;
+            border: 3px solid #000;
+            background-color: #4ecdc4;
+            color: #000;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            text-transform: uppercase;
+            font-weight: bold;
+            transition: all 0.1s;
+        }
+        nav button:hover, .category-buttons button:hover {
+            background-color: #45b7aa;
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0 #000;
+        }
+        nav button:active, .category-buttons button:active {
+            transform: translate(0, 0);
+            box-shadow: none;
+        }
+        .tool {
+            display: none;
+            background-color: #fff;
+            border: 4px solid #000;
+            box-shadow: 8px 8px 0 #000;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .tool.active {
+            display: block;
+        }
+        .tool h2 {
+            color: #000;
+            margin-top: 0;
+            font-size: 1.5em;
+            text-transform: uppercase;
+            background-color: #ff9ff3;
+            padding: 10px;
+            border: 3px solid #000;
+            display: inline-block;
+        }
+        input, textarea, button {
+            margin: 5px 0;
+            padding: 10px;
+            border: 3px solid #000;
+            font-size: 16px;
+            background-color: #fff;
+            color: #000;
+            font-family: 'Inter', sans-serif;
+        }
+        button {
+            background-color: #feca57;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.1s;
+        }
+        button:hover {
+            background-color: #feb125;
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0 #000;
+        }
+        button:active {
+            transform: translate(0, 0);
+            box-shadow: none;
+        }
+        #timer, #question, #flashcard {
+            font-size: 1.2em;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+            padding: 10px;
+            background-color: #54a0ff;
+            border: 3px solid #000;
+        }
+        #notepad, #todoList {
+            width: calc(100% - 26px);
+            height: 200px;
+            margin-top: 10px;
+            resize: vertical;
+        }
+        #flashcardForm {
+            margin-bottom: 20px;
+        }
+        #flashcardForm input {
+            width: calc(50% - 13px);
+            margin-right: 10px;
+        }
+        #flashcardList {
+            margin-top: 20px;
+        }
+        #flashcardList button {
+            margin-right: 5px;
+        }
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .mini-tool {
+            background-color: #fff;
+            border: 3px solid #000;
+            padding: 15px;
+            text-align: center;
+        }
+        .mini-tool h3 {
+            margin-top: 0;
+            background-color: #54a0ff;
+            padding: 5px;
+            border: 2px solid #000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Study Tools</h1>
+        
+        <nav>
+            <button onclick="location.href='Untitled-1.html'">Calculators</button>
+            <button onclick="location.href='physics_tools.html'">Physics Tools</button>
+        </nav>
+
+        <div class="category-buttons">
+            <button onclick="showTool('time-management')">Time Management</button>
+            <button onclick="showTool('note-taking')">Note Taking</button>
+            <button onclick="showTool('study-aids')">Study Aids</button>
+            <button onclick="showTool('productivity')">Productivity</button>
+            <button onclick="showTool('misc')">Miscellaneous</button>
+        </div>
+
+        <div class="tool" data-category="time-management">
+            <h2>Pomodoro Timer</h2>
+            <div id="timer">25:00</div>
+            <button onclick="startTimer()">Start</button>
+            <button onclick="resetTimer()">Reset</button>
+        </div>
+
+        <div class="tool" data-category="time-management">
+            <h2>To-Do List</h2>
+            <textarea id="todoList" placeholder="Enter your tasks here..."></textarea>
+            <button onclick="saveTodoList()">Save List</button>
+            <button onclick="clearTodoList()">Clear List</button>
+        </div>
+
+        <div class="tool" data-category="note-taking">
+            <h2>Quick Notepad</h2>
+            <textarea id="notepad" placeholder="Type your notes here..."></textarea>
+            <button onclick="saveNotes()">Save Notes</button>
+            <button onclick="clearNotes()">Clear Notes</button>
+        </div>
+
+        <div class="tool" data-category="study-aids">
+            <h2>Random Question Generator</h2>
+            <select id="questionCategory">
+                <option value="general">General Knowledge</option>
+                <option value="science">Science</option>
+                <option value="history">History</option>
+                <option value="literature">Literature</option>
+                <option value="geography">Geography</option>
+            </select>
+            <button onclick="generateQuestion()">Generate Question</button>
+            <p id="question"></p>
+        </div>
+
+        <div class="tool" data-category="study-aids">
+            <h2>Flashcards</h2>
+            <div id="flashcardForm">
+                <input type="text" id="questionInput" placeholder="Enter question">
+                <input type="text" id="answerInput" placeholder="Enter answer">
+                <button onclick="addFlashcard()">Add Flashcard</button>
+            </div>
+            <div id="flashcard"></div>
+            <button onclick="showAnswer()">Show Answer</button>
+            <button onclick="nextFlashcard()">Next Card</button>
+            <div id="flashcardList"></div>
+        </div>
+
+        <div class="tool" data-category="productivity">
+            <h2>Productivity Tools</h2>
+            <div class="tool-grid">
+                <div class="mini-tool">
+                    <h3>Goal Tracker</h3>
+                    <input type="text" id="goalInput" placeholder="Enter a goal">
+                    <button onclick="addGoal()">Add Goal</button>
+                    <ul id="goalList"></ul>
+                </div>
+                <div class="mini-tool">
+                    <h3>Focus Timer</h3>
+                    <input type="number" id="focusMinutes" min="1" max="120" value="25">
+                    <button onclick="startFocusTimer()">Start Focus</button>
+                    <div id="focusDisplay"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tool" data-category="misc">
+            <h2>Miscellaneous Tools</h2>
+            <div class="tool-grid">
+                <div class="mini-tool">
+                    <h3>Citation Generator</h3>
+                    <select id="citationStyle">
+                        <option value="apa">APA</option>
+                        <option value="mla">MLA</option>
+                        <option value="chicago">Chicago</option>
+                        <option value="harvard">Harvard</option>
+                    </select>
+                    <input type="text" id="authorInput" placeholder="Author (Last, First M.)">
+                    <input type="text" id="titleInput" placeholder="Title">
+                    <input type="text" id="yearInput" placeholder="Year">
+                    <input type="text" id="publisherInput" placeholder="Publisher">
+                    <input type="text" id="locationInput" placeholder="Location">
+                    <button onclick="generateCitation()">Generate Citation</button>
+                    <p id="citationOutput"></p>
+                </div>
+                <div class="mini-tool">
+                    <h3>Word Counter</h3>
+                    <textarea id="wordCountText" placeholder="Enter your text here"></textarea>
+                    <button onclick="countWords()">Count Words</button>
+                    <p id="wordCountResult"></p>
+                </div>
+                <div class="mini-tool">
+                    <h3>Random Name Picker</h3>
+                    <textarea id="nameList" placeholder="Enter names, one per line"></textarea>
+                    <button onclick="pickRandomName()">Pick a Name</button>
+                    <p id="pickedName"></p>
+                </div>
+                <div class="mini-tool">
+                    <h3>Unit Converter</h3>
+                    <select id="unitType">
+                        <option value="length">Length</option>
+                        <option value="weight">Weight</option>
+                        <option value="temperature">Temperature</option>
+                    </select>
+                    <input type="number" id="unitInput" placeholder="Enter value">
+                    <select id="fromUnit"></select>
+                    <select id="toUnit"></select>
+                    <button onclick="convertUnit()">Convert</button>
+                    <p id="unitResult"></p>
+                </div>
+                <div class="mini-tool">
+                    <h3>Study Music Player</h3>
+                    <input type="text" id="musicUrl" placeholder="Enter YouTube URL">
+                    <button onclick="playMusic()">Play</button>
+                    <button onclick="pauseMusic()">Pause</button>
+                    <iframe id="musicPlayer" width="100%" height="200" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                </div>
+                <div class="mini-tool">
+                    <h3>Vocabulary Builder</h3>
+                    <input type="text" id="wordInput" placeholder="Enter a word">
+                    <button onclick="getWordDefinition()">Get Definition</button>
+                    <p id="wordDefinition"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Existing timer functions
+        let timer;
+        let timeLeft = 1500;
+
+        function startTimer() {
+            if (!timer) {
+                timer = setInterval(updateTimer, 1000);
+            }
+        }
+
+        function updateTimer() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timer').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (timeLeft === 0) {
+                clearInterval(timer);
+                alert("Time's up! Take a break.");
+                resetTimer();
+            } else {
+                timeLeft--;
+            }
+        }
+
+        function resetTimer() {
+            clearInterval(timer);
+            timer = null;
+            timeLeft = 1500;
+            document.getElementById('timer').textContent = "25:00";
+        }
+
+        // Existing note functions
+        function saveNotes() {
+            const notes = document.getElementById('notepad').value;
+            localStorage.setItem('studyNotes', notes);
+            alert('Notes saved!');
+        }
+
+        function clearNotes() {
+            document.getElementById('notepad').value = '';
+            localStorage.removeItem('studyNotes');
+        }
+
+        // Load saved notes on page load
+        document.getElementById('notepad').value = localStorage.getItem('studyNotes') || '';
+
+        // To-Do List functions
+        function saveTodoList() {
+            const todoList = document.getElementById('todoList').value;
+            localStorage.setItem('todoList', todoList);
+            alert('To-Do List saved!');
+        }
+
+        function clearTodoList() {
+            document.getElementById('todoList').value = '';
+            localStorage.removeItem('todoList');
+        }
+
+        // Load saved to-do list on page load
+        document.getElementById('todoList').value = localStorage.getItem('todoList') || '';
+
+        // Updated question generator
+        const questions = {
+            general: [
+                "What is the capital of France?",
+                "Who wrote 'Romeo and Juliet'?",
+                "What is the chemical symbol for gold?",
+                "What is the largest planet in our solar system?",
+                "In what year did World War II end?"
+            ],
+            science: [
+                "What is the boiling point of water in Celsius?",
+                "Who developed the theory of relativity?",
+                "What is the smallest unit of matter?",
+                "What is the speed of light?",
+                "What is the chemical formula for table salt?"
+            ],
+            history: [
+                "Who was the first President of the United States?",
+                "In which year did the French Revolution begin?",
+                "Who was the first Emperor of Rome?",
+                "When did the Berlin Wall fall?",
+                "Who discovered America in 1492?"
+            ],
+            literature: [
+                "Who wrote '1984'?",
+                "What is the name of the main character in 'To Kill a Mockingbird'?",
+                "Who is the author of 'The Great Gatsby'?",
+                "In which Shakespeare play does the character Ophelia appear?",
+                "Who wrote 'One Hundred Years of Solitude'?"
+            ],
+            geography: [
+                "What is the longest river in the world?",
+                "What is the capital of Australia?",
+                "Which country has the largest population?",
+                "What is the smallest country in the world?",
+                "On which continent is the Sahara Desert located?"
+            ]
+        };
+
+        function generateQuestion() {
+            const category = document.getElementById('questionCategory').value;
+            const categoryQuestions = questions[category];
+            const randomIndex = Math.floor(Math.random() * categoryQuestions.length);
+            document.getElementById('question').textContent = categoryQuestions[randomIndex];
+        }
+
+        // Custom Flashcard system
+        let flashcards = JSON.parse(localStorage.getItem('customFlashcards')) || [
+            { question: "What is the capital of Japan?", answer: "Tokyo" },
+            { question: "Who painted the Mona Lisa?", answer: "Leonardo da Vinci" },
+            { question: "What is the largest organ in the human body?", answer: "Skin" },
+            { question: "What is the chemical formula for water?", answer: "H2O" },
+            { question: "Who wrote '1984'?", answer: "George Orwell" }
+        ];
+
+        let currentFlashcard = 0;
+        let showingAnswer = false;
+
+        function addFlashcard() {
+            const question = document.getElementById('questionInput').value;
+            const answer = document.getElementById('answerInput').value;
+            if (question && answer) {
+                flashcards.push({ question, answer });
+                saveFlashcards();
+                updateFlashcardList();
+                document.getElementById('questionInput').value = '';
+                document.getElementById('answerInput').value = '';
+            }
+        }
+
+        function showAnswer() {
+            const flashcardElement = document.getElementById('flashcard');
+            if (showingAnswer) {
+                flashcardElement.textContent = flashcards[currentFlashcard].question;
+            } else {
+                flashcardElement.textContent = flashcards[currentFlashcard].answer;
+            }
+            showingAnswer = !showingAnswer;
+        }
+
+        function nextFlashcard() {
+            currentFlashcard = (currentFlashcard + 1) % flashcards.length;
+            showingAnswer = false;
+            document.getElementById('flashcard').textContent = flashcards[currentFlashcard].question;
+        }
+
+        function saveFlashcards() {
+            localStorage.setItem('customFlashcards', JSON.stringify(flashcards));
+        }
+
+        function updateFlashcardList() {
+            const listElement = document.getElementById('flashcardList');
+            listElement.innerHTML = '';
+            flashcards.forEach((card, index) => {
+                const cardElement = document.createElement('div');
+                cardElement.innerHTML = `
+                    <strong>${card.question}</strong>: ${card.answer}
+                    <button onclick="editFlashcard(${index})">Edit</button>
+                    <button onclick="deleteFlashcard(${index})">Delete</button>
+                `;
+                listElement.appendChild(cardElement);
+            });
+        }
+
+        function editFlashcard(index) {
+            const card = flashcards[index];
+            document.getElementById('questionInput').value = card.question;
+            document.getElementById('answerInput').value = card.answer;
+            flashcards.splice(index, 1);
+            saveFlashcards();
+            updateFlashcardList();
+        }
+
+        function deleteFlashcard(index) {
+            flashcards.splice(index, 1);
+            saveFlashcards();
+            updateFlashcardList();
+            if (currentFlashcard >= flashcards.length) {
+                currentFlashcard = 0;
+            }
+            document.getElementById('flashcard').textContent = flashcards[currentFlashcard].question;
+        }
+
+        // Initialize flashcard and list
+        document.getElementById('flashcard').textContent = flashcards[0].question;
+        updateFlashcardList();
+
+        // Show/hide tools based on category
+        function showTool(category) {
+            const tools = document.getElementsByClassName('tool');
+            for (let tool of tools) {
+                if (tool.getAttribute('data-category') === category) {
+                    tool.classList.add('active');
+                } else {
+                    tool.classList.remove('active');
+                }
+            }
+        }
+
+        // Show time management tools by default
+        showTool('time-management');
+
+        // New tool functions
+        function addGoal() {
+            const goal = document.getElementById('goalInput').value;
+            if (goal) {
+                const li = document.createElement('li');
+                li.textContent = goal;
+                document.getElementById('goalList').appendChild(li);
+                document.getElementById('goalInput').value = '';
+            }
+        }
+
+        let focusTimer;
+        function startFocusTimer() {
+            clearInterval(focusTimer);
+            let minutes = parseInt(document.getElementById('focusMinutes').value);
+            let seconds = minutes * 60;
+            focusTimer = setInterval(() => {
+                if (seconds <= 0) {
+                    clearInterval(focusTimer);
+                    document.getElementById('focusDisplay').textContent = "Time's up!";
+                } else {
+                    const minutesLeft = Math.floor(seconds / 60);
+                    const secondsLeft = seconds % 60;
+                    document.getElementById('focusDisplay').textContent = 
+                        `${minutesLeft}:${secondsLeft.toString().padStart(2, '0')}`;
+                    seconds--;
+                }
+            }, 1000);
+        }
+
+        function generateCitation() {
+            const style = document.getElementById('citationStyle').value;
+            const author = document.getElementById('authorInput').value;
+            const title = document.getElementById('titleInput').value;
+            const year = document.getElementById('yearInput').value;
+            const publisher = document.getElementById('publisherInput').value;
+            const location = document.getElementById('locationInput').value;
+
+            let citation = '';
+
+            switch (style) {
+                case 'apa':
+                    citation = `${author}. (${year}). ${title}. ${location}: ${publisher}.`;
+                    break;
+                case 'mla':
+                    const authorParts = author.split(', ');
+                    const authorMLA = authorParts.length > 1 ? `${authorParts[1]} ${authorParts[0]}` : author;
+                    citation = `${authorMLA}. ${title}. ${publisher}, ${year}.`;
+                    break;
+                case 'chicago':
+                    citation = `${author}. ${title}. ${location}: ${publisher}, ${year}.`;
+                    break;
+                case 'harvard':
+                    citation = `${author}, ${year}. ${title}. ${location}: ${publisher}.`;
+                    break;
+            }
+
+            document.getElementById('citationOutput').textContent = citation;
+        }
+
+        function countWords() {
+            const text = document.getElementById('wordCountText').value;
+            const wordCount = text.trim().split(/\s+/).length;
+            document.getElementById('wordCountResult').textContent = `Word count: ${wordCount}`;
+        }
+
+        function pickRandomName() {
+            const names = document.getElementById('nameList').value.split('\n').filter(name => name.trim() !== '');
+            if (names.length > 0) {
+                const randomName = names[Math.floor(Math.random() * names.length)];
+                document.getElementById('pickedName').textContent = randomName;
+            }
+        }
+
+        // Unit Converter
+        const unitConversions = {
+            length: {
+                m: 1,
+                ft: 3.28084,
+                in: 39.3701,
+                cm: 100,
+                mm: 1000
+            },
+            weight: {
+                kg: 1,
+                lb: 2.20462,
+                oz: 35.274,
+                g: 1000,
+                mg: 1000000
+            },
+            temperature: {
+                c: {
+                    to: 'f',
+                    formula: (c) => c * 9/5 + 32
+                },
+                f: {
+                    to: 'c',
+                    formula: (f) => (f - 32) * 5/9
+                }
+            }
+        };
+
+        function convertUnit() {
+            const unitType = document.getElementById('unitType').value;
+            const fromUnit = document.getElementById('fromUnit').value;
+            const toUnit = document.getElementById('toUnit').value;
+            const inputValue = parseFloat(document.getElementById('unitInput').value);
+
+            if (isNaN(inputValue)) {
+                document.getElementById('unitResult').textContent = 'Invalid input';
+                return;
+            }
+
+            if (unitType === 'temperature') {
+                const conversion = unitConversions[unitType][fromUnit];
+                const result = conversion.formula(inputValue);
+                document.getElementById('unitResult').textContent = `${inputValue} ${fromUnit.toUpperCase()} = ${result.toFixed(2)} ${conversion.to.toUpperCase()}`;
+            } else {
+                const result = inputValue * unitConversions[unitType][toUnit] / unitConversions[unitType][fromUnit];
+                document.getElementById('unitResult').textContent = `${inputValue} ${fromUnit.toUpperCase()} = ${result.toFixed(2)} ${toUnit.toUpperCase()}`;
+            }
+        }
+
+        document.getElementById('unitType').addEventListener('change', updateUnitOptions);
+
+        function updateUnitOptions() {
+            const unitType = document.getElementById('unitType').value;
+            const fromUnitSelect = document.getElementById('fromUnit');
+            const toUnitSelect = document.getElementById('toUnit');
+
+            fromUnitSelect.innerHTML = '';
+            toUnitSelect.innerHTML = '';
+
+            for (const unit in unitConversions[unitType]) {
+                const option = document.createElement('option');
+                option.value = unit;
+                option.textContent = unit.toUpperCase();
+                fromUnitSelect.appendChild(option.cloneNode(true));
+                toUnitSelect.appendChild(option);
+            }
+        }
+
+        updateUnitOptions();
+
+        // Study Music Player
+        let player;
+
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('musicPlayer', {
+                height: '200',
+                width: '100%',
+                videoId: 'dQw4w9WgXcQ',
+                playerVars: {
+                    'autoplay': 0,
+                    'controls': 1,
+                    'rel': 0,
+                    'showinfo': 0
+                }
+            });
+        }
+
+        function playMusic() {
+            const url = document.getElementById('musicUrl').value;
+            const videoId = getYouTubeVideoId(url);
+            if (videoId) {
+                player.loadVideoById(videoId);
+                player.playVideo();
+            } else {
+                alert('Invalid YouTube URL');
+            }
+        }
+
+        function pauseMusic() {
+            player.pauseVideo();
+        }
+
+        function getYouTubeVideoId(url) {
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : null;
+        }
+
+        // Vocabulary Builder
+        const dictionaryApiUrl = 'https://api.dictionaryapi.dev/api/v2/entries/en/';
+
+        async function getWordDefinition() {
+            const word = document.getElementById('wordInput').value.trim().toLowerCase();
+            if (!word) return;
+
+            try {
+                const response = await fetch(dictionaryApiUrl + word);
+                const data = await response.json();
+
+                if (data.title === 'No Definitions Found') {
+                    document.getElementById('wordDefinition').textContent = 'No definitions found for this word.';
+                } else {
+                    const meanings = data[0].meanings.map(meaning => {
+                        return `<strong>${meaning.partOfSpeech}</strong>: ${meaning.definitions[0].definition}`;
+                    }).join('<br>');
+                    document.getElementById('wordDefinition').innerHTML = meanings;
+                }
+            } catch (error) {
+                console.error('Error fetching word definition:', error);
+                document.getElementById('wordDefinition').textContent = 'An error occurred while fetching the definition.';
+            }
+        }
+    </script>
+    
+    <!-- Add this just before the closing </body> tag -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+</body>
+</html>
